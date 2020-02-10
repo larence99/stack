@@ -1,0 +1,97 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+class stack {
+
+private:
+	struct node {
+		int value;
+		node* prev = nullptr; //NULL
+	};
+	node* top;
+	bool is_empty();
+
+
+
+public: //public API
+	stack() : top(nullptr) {}
+	~stack() {}
+	void push(int value);
+	int* pop();
+	void Save(stack);
+	void clear(stack);
+};
+
+
+bool stack::is_empty() {
+	return !top;
+}
+
+
+
+
+
+void stack::push(int value) {
+	node* tmp = new node();
+	tmp->value = value;
+	tmp->prev = top;
+	top = tmp;
+}
+
+
+int* stack::pop() {
+	
+	if (!is_empty()) {
+		int* tmp_val = new int(top->value);
+		node* tmp_top = top;
+		top = top->prev;
+		delete tmp_top;
+		return tmp_val;
+	}
+	return nullptr;
+}
+
+void stack::clear(stack stack){
+	while (is_empty())stack.pop();
+		
+
+}
+
+void stack::Save(stack stack){
+	std::ofstream out;
+	out.open("C:\\Users\gabaranov\stack.txt");
+	
+
+	if (out.is_open())
+	{
+		while (!is_empty()){
+			out << stack.pop() << endl;
+
+		}
+		
+	
+	}
+	
+}
+
+
+
+
+
+int main() {
+	stack stack;
+	int size = 10;
+	for (int i = 0; i < size; i++) {
+		stack.push(i);
+	//	stack.Save(stack);
+	}
+
+	
+	for (int i = 0; i < size; i++) {
+		stack.Save(stack);
+		cout << *stack.pop();
+	}
+	stack.clear(stack);
+
+	return 0;
+}
